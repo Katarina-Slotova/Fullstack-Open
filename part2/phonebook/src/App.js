@@ -47,11 +47,33 @@ const Persons = ({persons, action}) => {
 	)
 }
 
+const Notification = ({message}) => {
+	if (message === null)
+		return null
+	return (
+		<div className='notification'>
+			{message}
+		</div>
+	)
+}
+
+const Error = ({message}) => {
+	if (message === null)
+		return null
+	return (
+		<div className='error'>
+			{message}
+		</div>
+	)
+}
+
 const App = () => {
 	const [persons, setPersons] = useState([])
 	const [newName, setNewName] = useState('')
 	const [newNumber, setNewNumber] = useState('')
 	const [displayFilter, setDisplayFilter] = useState('')
+	const [errorMessage, setErrorMessage] = useState(null)
+	const [notification, setNotification] = useState(null)
 
 	useEffect(() => {
 		pbService
@@ -69,8 +91,18 @@ const App = () => {
 				.then(returnedPerson => {
 					setPersons(persons.map(person => person.id === id ? returnedPerson : person))
 					setPersons(persons.filter(person => person.id !== id))
+					setNotification('Contact was deleted.')
+					setTimeout(() => {
+						setNotification(null)
+					}, 5000)
 				})
-		}
+				.catch(error => {
+					setErrorMessage(`Information on ${person.name} has already been removed from the server.`)
+					setTimeout(() => {
+						setErrorMessage(null)
+					}, 5000)
+				})
+			}
 	}
 
 	const displayFilteredContacts = persons.filter((person) => 
@@ -86,6 +118,16 @@ const App = () => {
 				setPersons(persons.map(person => person.id === id ? returnedPerson : person))
 				setNewName('')
 				setNewNumber('')
+				setNotification('Contact number was updated.')
+				setTimeout(() => {
+					setNotification(null)
+				}, 5000)
+			})
+			.catch(error => {
+				setErrorMessage(`Information on ${person.name} has already been removed from the server.`)
+				setTimeout(() => {
+					setErrorMessage(null)
+				}, 5000)
 			})
 	}
 	
@@ -108,8 +150,12 @@ const App = () => {
 					setPersons(persons.concat(returnedPerson))
 					setNewName('')
 					setNewNumber('')
+					setNotification(`${newName} was added to the phonebook.`)
+					setTimeout(() => {
+						setNotification(null)
+					}, 5000)
 				})
-		} 
+		}
 	}
 
 	const handleNameAddition = (e) => {
@@ -127,6 +173,8 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<Error message={errorMessage}/>
+			<Notification message={notification}/>
 			<Filter value={displayFilter} action={handleFilter}/>
 			<h3>Add a new contact</h3>
 			<PersonForm newName={newName} newNumber={newNumber} functions={[addName, handleNameAddition, handleNumberAddition]}/>
