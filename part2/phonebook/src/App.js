@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import pbService from './services/persons'
 
 const Filter = ({value, action}) => {
 	return (
@@ -36,11 +36,12 @@ const PersonForm = ({newName, newNumber, functions}) => {
 	)
 }
 
-const Persons = ({persons}) => {
+
+const Persons = ({persons, action}) => {
 	return (
 		<>
 		{persons.map((person) => ( 
-			<p key={person.id}>{person.name} {person.number}</p>
+			<p key={person.id}>{person.name} {person.number} <button onClick={() => action(person.id)}>delete</button> </p>
 		))}
 		</>
 	)
@@ -53,31 +54,60 @@ const App = () => {
 	const [displayFilter, setDisplayFilter] = useState('')
 
 	useEffect(() => {
-		axios
-			.get('http://localhost:3001/persons')
-			.then(response => {
-				setPersons(response.data)
+		pbService
+			.getAll()
+			.then(ogNotes => {
+				setPersons(ogNotes)
 			})
 	}, [])
+
+	const deleteContact = (id) => {
+		const person = persons.find(person => person.id === id)
+		if(window.confirm(`Are you sure you want to delete ${person.name} from your contacts?`)){
+			pbService
+				.remove(id)
+				.then(returnedPerson => {
+					setPersons(persons.map(person => person.id === id ? returnedPerson : person))
+					setPersons(persons.filter(person => person.id !== id))
+				})
+		}
+	}
 
 	const displayFilteredContacts = persons.filter((person) => 
 		person.name.toLowerCase().includes(displayFilter.toLowerCase(displayFilter)))
 
+	const updateContact = (id, newNumber) => {
+		const person = persons.find(person => person.id === id)
+		const changedContact = {...person, number: newNumber}
+		
+		pbService
+			.update(person.id, changedContact)
+			.then(returnedPerson => {
+				setPersons(persons.map(person => person.id === id ? returnedPerson : person))
+				setNewName('')
+				setNewNumber('')
+			})
+	}
+	
 	const addName = (e) => {
+		const person = persons.find(person => person.name === newName)
 		e.preventDefault()
-		persons.map((person) => {
-			if(person.name === newName)
-				alert(`${newName} is already in phonebook`)
-			else {
-				const newPerson = {
-					name: newName,
-					number: newNumber,
-				}
-				setPersons(persons.concat(newPerson))
+		if (window.confirm(`${newName} is already in the phonebook. Replace the od number with a new one?`)){
+			updateContact(person.id, newNumber)
+		} else { 
+			const newPerson = {
+				name: newName,
+				number: newNumber,
 			}
-		})
-		setNewName('')
-		setNewNumber('')
+	
+			pbService
+				.create(newPerson)
+				.then(returnedPerson => {
+					setPersons(persons.concat(returnedPerson))
+					setNewName('')
+					setNewNumber('')
+				})
+		} 
 	}
 
 	const handleNameAddition = (e) => {
@@ -99,7 +129,7 @@ const App = () => {
 			<h3>Add a new contact</h3>
 			<PersonForm newName={newName} newNumber={newNumber} functions={[addName, handleNameAddition, handleNumberAddition]}/>
 			<h2>Numbers</h2>
-			<Persons persons={displayFilteredContacts} />
+			<Persons persons={displayFilteredContacts} action={deleteContact}/>
 		</div>
 	)
 }
