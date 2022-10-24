@@ -92,8 +92,10 @@ const App = () => {
 	const addName = (e) => {
 		const person = persons.find(person => person.name === newName)
 		e.preventDefault()
-		if (window.confirm(`${newName} is already in the phonebook. Replace the od number with a new one?`)){
-			updateContact(person.id, newNumber)
+		if (persons.find(person => person.name === newName)){
+			if (window.confirm(`${newName} is already in the phonebook. Replace the od number with a new one?`)){
+				updateContact(person.id, newNumber)
+		}
 		} else { 
 			const newPerson = {
 				name: newName,
