@@ -1,71 +1,10 @@
 import { useState, useEffect } from 'react'
 import pbService from './services/persons'
-
-const Filter = ({value, action}) => {
-	return (
-		<>
-		filter shown with <input 
-				value={value}
-				onChange={action}
-			/>
-		</>
-	)
-}
-
-const PersonForm = ({newName, newNumber, functions}) => {
-	return (
-		<>
-		<form onSubmit={functions[0]}>
-			<div>
-				name: <input 
-						value={newName}
-						onChange={functions[1]}
-					/>
-			</div>
-			<div>
-				number: <input 
-							value={newNumber}
-							onChange={functions[2]}
-				/>
-			</div>
-			<div>
-				<button type="submit">add</button>
-			</div>
-		</form>
-		</>
-	)
-}
-
-
-const Persons = ({persons, action}) => {
-	return (
-		<>
-		{persons.map((person) => ( 
-			<p key={person.id}>{person.name} {person.number} <button onClick={() => action(person.id)}>delete</button> </p>
-		))}
-		</>
-	)
-}
-
-const Notification = ({message}) => {
-	if (message === null)
-		return null
-	return (
-		<div className='notification'>
-			{message}
-		</div>
-	)
-}
-
-const Error = ({message}) => {
-	if (message === null)
-		return null
-	return (
-		<div className='error'>
-			{message}
-		</div>
-	)
-}
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
+import Notification from './components/Notification'
+import Error from './components/Error'
 
 const App = () => {
 	const [persons, setPersons] = useState([])
