@@ -1,0 +1,37 @@
+install node js: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash 
+and then: nvm install node
+source: https://medium.com/geekculture/how-to-install-node-js-by-nvm-61addf4ab1ba
+
+install only node_modules: npm install
+
+create a new react app: npm create-react-app name_of_dir
+
+run it: npm start
+
+run json server: npx json-server --port 3001 --watch db.json
+
+////////////////////////////////////////////////////////////////////////////////
+
+NODE.JS - part3
+
+create a new template for application: npm init
+
+add to the scripts in package.json: "start": "node index.js",
+
+// add whatever to the index.js that is in the root of dir
+
+run the program (2 ways): node index.js OR npm start (this second one is defined in the scripts part and it is customary to do it like that, i.e. by executing such tasks as npm scripts)
+
+intall express library: npm install express
+
+update dependencies: npm update
+
+if we start working on the project on another computer, install all up-to-date dependencies of the project defined in package.json with running this command in the project's root directory: npm install
+
+install nodemon as development dependency: npm install --save-dev nodemon
+
+start app with nodemon: node_modules/.bin/nodemon index.js
+however, it is better to add a npm script for this in package.json and then strat it like this: npm run dev
+
+
+
