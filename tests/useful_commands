@@ -30,7 +30,7 @@ if we start working on the project on another computer, install all up-to-date d
 
 install nodemon as development dependency: npm install --save-dev nodemon
 
-start app with nodemon: node_modules/.bin/nodemon index.js
+start app with nodemon: nodemon index.js
 however, it is better to add a npm script for this in package.json and then strat it like this: npm run dev
 
 spot a missing Content-Type header by printing all of the request headers: console.log(request.headers)
