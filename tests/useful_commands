@@ -35,3 +35,24 @@ however, it is better to add a npm script for this in package.json and then stra
 
 spot a missing Content-Type header by printing all of the request headers: console.log(request.headers)
 
+install morgan middleware for backend for debugging, remember to take it to use
+
+install cors middleware to backend for connecting frontend (on port 3000) with backend (on port 3001)
+remember to take cors to use
+
+do deployment on heroku: https://devcenter.heroku.com/articles/getting-started-with-nodejs
+add a file called Procfile to the backend project's root to tell Heroku how to start the application: web: node index.js
+create a Git repository in the project directory (have the project directory as a NON-GIT REPO): git init
+add .gitignore with the following contents: node_modules
+install the Heroku package: npm install -g heroku
+create a Heroku application: heroku create
+commit your code to the repository and move it to Heroku: git push heroku main !!! => is this command doe s not work, use git push heroku HEAD:master OR git push heroku HEAD:main --force
+
+after deploying the app, create a production build (i.e. eploy frontend to the Internet):
+- in the root of the frontend project, run: npm run build (this creates a build dir)
+- while in the frontend dir in terminal, copy the build dir to backend of the app: cp -r build ../notes-backend
+- use express' built-in middleware called static in order for express to show the static content (JS, index.html, etc)
+
+
+
+

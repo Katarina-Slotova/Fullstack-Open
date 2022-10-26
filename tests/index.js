@@ -1,11 +1,14 @@
 //const { response } = require('express')
 const express = require('express') //import express library. it is like import http from 'http' in React, but Node doesn't support this module definition
 const app = express() //function that creates the express app stored in app variable
+const cors = require('cors')
 
 app.use(express.json()) // easily access the data that needs to be sent in the body of the request (POST request) in JSON format
 // Without the json-parser, the body property would be undefined. 
 // The json-parser takes the JSON data of a request, transforms it into a JavaScript object 
 // and then attaches it to the body property of the request object before the route handler is called.
+app.use(cors())
+
 
 let notes = [
 	{
@@ -96,7 +99,7 @@ app.post('/api/notes', (request, response) => {
 	response.end(JSON.stringify(notes)) // content of the site to be returned
 }) */
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => { // http server that was assigned to variable app will listen to HTTP requests sent to port 3001
 	console.log(`Server running on port ${PORT}`)
 })
