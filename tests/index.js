@@ -1,7 +1,9 @@
 //const { response } = require('express')
+require('dotenv').config()
 const express = require('express') //import express library. it is like import http from 'http' in React, but Node doesn't support this module definition
 const app = express() //function that creates the express app stored in app variable
 const cors = require('cors')
+const Note = require('./models/note')
 
 app.use(express.json()) // easily access the data that needs to be sent in the body of the request (POST request) in JSON format
 // Without the json-parser, the body property would be undefined. 
@@ -10,7 +12,7 @@ app.use(express.json()) // easily access the data that needs to be sent in the b
 app.use(cors())
 
 
-let notes = [
+/* let notes = [
 	{
 		id: 1,
 		content: "HTML is easy",
@@ -29,7 +31,7 @@ let notes = [
 		date: "2022-05-30T19:20:14.298Z",
 		important: true
 	}
-]
+] */
 
 // two routes to the app defined below
 
@@ -46,18 +48,25 @@ app.get('/', (request, response) => {
 // second route defines an event handler that handles HTTP GET requests made to the notes path of the application
 // no need to specifiy content-type, because it is an array passed to json method as a JSON-formatted string, express automatically sets its value to application/json
 app.get('/api/notes', (request, response) => {
-	response.json(notes)
+	Note.find({}).then((notes) => {
+		response.json(notes)
+	})
 })
 
 app.get('/api/notes/:id', (request, response) => { // colon specifiies something that is an arbitrary string
-	const id = Number(request.params.id) // parameter id can be accessed via request object
+/* 	const id = Number(request.params.id) // parameter id can be accessed via request object
 	const note = notes.find(note => note.id === id)
 
 	if (note){
 		response.json(note)
 	} else {
 		response.status(404).end()
-	}
+	} */
+
+	// with mongoose findById method:
+	Note.findById(request.params.id).then((note) => {
+		response.json(note)
+	})
 })
 
 app.delete('/api/notes/:id', (request, response) => {
@@ -81,17 +90,17 @@ app.post('/api/notes', (request, response) => {
 		})
 	}
 
-	const note = {
+	const note = new Note({ // new notes are created with Note constructor function
 		content: body.content,
 		important: body.important || false,
 		date: new Date(),
-		id: generateId()
-	}
+		//id: generateId()
+	})
 
-	notes = notes.concat(note)
+	note.save().then(savedNote => {
+		response.json(savedNote)
+	})
 
-	console.log(note)
-	response.json(note)
 })
 
 /* const app = http.createServer((request, response) => { // createServer is http's module; make a request to the server's address localhost:3001
@@ -99,7 +108,7 @@ app.post('/api/notes', (request, response) => {
 	response.end(JSON.stringify(notes)) // content of the site to be returned
 }) */
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => { // http server that was assigned to variable app will listen to HTTP requests sent to port 3001
 	console.log(`Server running on port ${PORT}`)
 })
