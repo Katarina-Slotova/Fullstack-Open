@@ -4,6 +4,7 @@ const express = require('express') //import express library. it is like import h
 const app = express() //function that creates the express app stored in app variable
 const cors = require('cors')
 const Note = require('./models/note')
+const { request } = require('express')
 
 app.use(express.json()) // easily access the data that needs to be sent in the body of the request (POST request) in JSON format
 // Without the json-parser, the body property would be undefined. 
@@ -53,7 +54,7 @@ app.get('/api/notes', (request, response) => {
 	})
 })
 
-app.get('/api/notes/:id', (request, response) => { // colon specifiies something that is an arbitrary string
+app.get('/api/notes/:id', (request, response, next) => { // colon specifiies something that is an arbitrary string
 /* 	const id = Number(request.params.id) // parameter id can be accessed via request object
 	const note = notes.find(note => note.id === id)
 
@@ -64,16 +65,28 @@ app.get('/api/notes/:id', (request, response) => { // colon specifiies something
 	} */
 
 	// with mongoose findById method:
-	Note.findById(request.params.id).then((note) => {
-		response.json(note)
-	})
+	Note.findById(request.params.id)
+		.then((note) => {
+			if(note)
+				response.json(note)
+			else
+				response.status(404).end()
+		})
+		.catch(error => {
+			// if the next function is called with a parameter, 
+			// then the execution will continue to the error handler middleware
+			next(error)
+		})
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-	const id = Number(request.params.id)
-	notes = notes.filter(note => note.id !== id)
-
-	response.status(204).end()
+app.delete('/api/notes/:id', (request, response, next) => {
+/* 	const id = Number(request.params.id)
+	notes = notes.filter(note => note.id !== id) */
+	Note.findByIdAndRemove(request.params.id)
+		.then(result => {
+			response.status(204).end()
+		})
+		.catch(error => next(error))
 })
 
 generateId = () => {
@@ -101,6 +114,22 @@ app.post('/api/notes', (request, response) => {
 		response.json(savedNote)
 	})
 
+})
+
+// change the importance of a note
+app.put('/api/persons/:id', (request, response, next) => {
+	const body = request.body
+
+	const note = {
+		content: body.content,
+		important: body.important || false,
+	}
+
+	Note.findByIdAndUpdate(request.params.id, note, {new: true})
+		.then(updatedNote => {
+			response.json(updatedNote)
+		})
+		.catch(error => next(error))
 })
 
 /* const app = http.createServer((request, response) => { // createServer is http's module; make a request to the server's address localhost:3001
