@@ -6,7 +6,10 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "Postman is a good tool for testing a REST-api",
+    "content": "blablablabla",
     "important": true
 }
 
+###
+
+DELETE http://localhost:3001/api/notes/635a64ac806e3b6ffedb825e

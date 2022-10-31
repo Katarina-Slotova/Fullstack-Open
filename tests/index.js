@@ -12,6 +12,16 @@ app.use(express.json()) // easily access the data that needs to be sent in the b
 // and then attaches it to the body property of the request object before the route handler is called.
 app.use(cors())
 
+/* const errorHandler = (error, request, response, next) => {
+	console.error(error.message)
+
+	if (error.name === 'CastError') {
+		return response.status(400).send({ error: 'malformatted id' })
+	} else if (error.name === 'ValidationError') {
+		return response.status(400).json({ error: error.message })
+	}
+	next(error)
+} */
 
 /* let notes = [
 	{
@@ -94,14 +104,14 @@ generateId = () => {
 	return maxId
 }
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
 	const body = request.body
 
-	if(!body.content){
+/* 	if(!body.content){
 		return response.status(400).json({
 			error: 'content missing'
 		})
-	}
+	} */
 
 	const note = new Note({ // new notes are created with Note constructor function
 		content: body.content,
@@ -113,19 +123,24 @@ app.post('/api/notes', (request, response) => {
 	note.save().then(savedNote => {
 		response.json(savedNote)
 	})
+	.catch(error => next(error))
 
 })
 
 // change the importance of a note
 app.put('/api/persons/:id', (request, response, next) => {
-	const body = request.body
+	const { content, important } = request.body
 
-	const note = {
+/* 	const note = {
 		content: body.content,
 		important: body.important || false,
-	}
+	} */
 
-	Note.findByIdAndUpdate(request.params.id, note, {new: true})
+	Note.findByIdAndUpdate(
+		request.params.id, 
+		{ content, important }, 
+		{new: true, runValidators: true, context: 'query'}
+	)
 		.then(updatedNote => {
 			response.json(updatedNote)
 		})
