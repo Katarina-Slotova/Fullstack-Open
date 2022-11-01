@@ -1,0 +1,4 @@
+- when using redux and I move App component to its separate file from index.js,
+it is necessary for the App component to still aceess the store
+- to enable the access, use hooks-api from react-redux library:
+1. install react-redux library: npm install react-redux
