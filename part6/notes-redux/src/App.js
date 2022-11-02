@@ -2,6 +2,7 @@
 import { useSelector, useDispatch } from 'react-redux' // import hooks from react-redux library */
 import NewNote from './components/NewNote'
 import Notes from './components/Notes'
+import VisibilityFilter from './components/VisibilityFilter';
 
 // useDispatch-hook provides any React component access to the dispatch-function of the redux-store defined in index.js
 // component can access the notes stored in the store with the useSelector-hook of the react-redux library; it receives a function as a parameter
@@ -38,6 +39,16 @@ const App = () => {
 				<button type="submit">add</button>
 			</form> */}
 			<NewNote />
+			<VisibilityFilter />
+			{/* filtering notes extracted to a separate component  */}
+			{/* <div>
+				 the name attribute of all the radio buttons is the same, they form a button group where only one option can be selected				all <input type="radio" name="filter"
+					onChange={() => filterSelected('ALL')} />
+				important <input type="radio" name="filter"
+					onChange={() => filterSelected('IMPORTANT')} />
+				nonimportant <input type="radio" name="filter"
+						onChange={() => filterSelected('NONIMPORTANT')} />
+			</div> */}
 			{/* list of existing notes moved to a separate component Notes.js */}
 			{/* <ul>
 				{notes.map(note =>

@@ -1,13 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App';
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import noteReducer from './reducers/noteReducer'
+import filterReducer from './reducers/filterReducer';
 
-const store = createStore(noteReducer)
+const reducer =  combineReducers({
+	notes: noteReducer,
+	filter: filterReducer,
+})
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const store = createStore(reducer)
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+	<Provider store={store}>
+		<App />
+	</Provider>
+)
+
+/* const root = ReactDOM.createRoot(document.getElementById('root'));
 const renderApp = () => {
 	root.render(
 		// The <Provider> component makes the Redux store available to any nested components that need to access the Redux store
@@ -20,4 +32,4 @@ const renderApp = () => {
 }
 
 renderApp()
-store.subscribe(renderApp)
+store.subscribe(renderApp) */
