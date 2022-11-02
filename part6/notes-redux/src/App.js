@@ -1,7 +1,7 @@
 /* import { toggleImportanceOf } from "./reducers/noteReducer"
 import { useSelector, useDispatch } from 'react-redux' // import hooks from react-redux library */
 import NewNote from './components/NewNote'
-import Notes from './cmponents/Notes'
+import Notes from './components/Notes'
 
 // useDispatch-hook provides any React component access to the dispatch-function of the redux-store defined in index.js
 // component can access the notes stored in the store with the useSelector-hook of the react-redux library; it receives a function as a parameter
