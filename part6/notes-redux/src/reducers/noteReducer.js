@@ -23,6 +23,7 @@ const generateId = () =>
 
 // separate creating actions into their own functions
 // functions that create actions are called action creators
+// keep these where the reducer is defined
 export const createNote = (content) => {
 	return {
 		type: 'NEW_NOTE',

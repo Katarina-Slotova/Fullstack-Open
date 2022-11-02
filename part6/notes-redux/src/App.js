@@ -1,17 +1,18 @@
-import { toggleImportanceOf } from "./reducers/noteReducer"
-import { useSelector, useDispatch } from 'react-redux' // import hooks from react-redux library
+/* import { toggleImportanceOf } from "./reducers/noteReducer"
+import { useSelector, useDispatch } from 'react-redux' // import hooks from react-redux library */
 import NewNote from './components/NewNote'
+import Notes from './cmponents/Notes'
 
 // useDispatch-hook provides any React component access to the dispatch-function of the redux-store defined in index.js
 // component can access the notes stored in the store with the useSelector-hook of the react-redux library; it receives a function as a parameter
 // we need all of the notes, so our selector function returns the whole stat, but it can also search for or select data from the redux-storee
 
 const App = () => {
-	const dispatch = useDispatch()
+/* 	const dispatch = useDispatch()
 	// const importantNotes = useSelector(state => state.filter(note => note.important)) --> this is how useSelector can filter out the result
 	const notes = useSelector((state) => {
 		return state
-	})
+	}) */
 	// to add a note, dispatch the action for adding notes --> moved to a separate component
 /* 	const addNote = (event) => {
 		console.log(event)
@@ -25,9 +26,9 @@ const App = () => {
 	} */
 
 	// event handler for changing the importance of a note
-	const toggleImportance = (id) => {
+/* 	const toggleImportance = (id) => {
 		dispatch(toggleImportanceOf(id))
-	}
+	} */
 
 	return (
 		<div>
@@ -37,7 +38,8 @@ const App = () => {
 				<button type="submit">add</button>
 			</form> */}
 			<NewNote />
-			<ul>
+			{/* list of existing notes moved to a separate component Notes.js */}
+			{/* <ul>
 				{notes.map(note =>
 				<li
 					key={note.id}
@@ -46,7 +48,8 @@ const App = () => {
 					{note.content} <strong>{note.important ? 'important' : ''}</strong>
 				</li>
 				)}
-			</ul>
+			</ul> */}
+			<Notes />
 		</div>
 	)
 }
