@@ -2,3 +2,4 @@
 it is necessary for the App component to still aceess the store
 - to enable the access, use hooks-api from react-redux library:
 1. install react-redux library: npm install react-redux
+2. install library Redux Toolkit for easier usage of Redux: npm install @reduxjs/toolkit

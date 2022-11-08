@@ -3,6 +3,10 @@ import { useSelector, useDispatch } from 'react-redux' // import hooks from reac
 import NewNote from './components/NewNote'
 import Notes from './components/Notes'
 import VisibilityFilter from './components/VisibilityFilter';
+import { useEffect } from 'react'
+import noteService from './services/notes'
+import { setNotes } from './reducers/noteReducer'
+import { useDispatch } from 'react-redux'
 
 // useDispatch-hook provides any React component access to the dispatch-function of the redux-store defined in index.js
 // component can access the notes stored in the store with the useSelector-hook of the react-redux library; it receives a function as a parameter
@@ -30,6 +34,14 @@ const App = () => {
 /* 	const toggleImportance = (id) => {
 		dispatch(toggleImportanceOf(id))
 	} */
+
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		noteService
+			.getAll()
+			.then(notes => dispatch(setNotes(notes)))
+	}, [dispatch]) // add dispatch in here to remove eslint warning
 
 	return (
 		<div>
@@ -65,4 +77,4 @@ const App = () => {
 	)
 }
 
-export default App;
+export default App
