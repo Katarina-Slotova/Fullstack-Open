@@ -4,8 +4,7 @@ import NewNote from './components/NewNote'
 import Notes from './components/Notes'
 import VisibilityFilter from './components/VisibilityFilter';
 import { useEffect } from 'react'
-import noteService from './services/notes'
-import { setNotes } from './reducers/noteReducer'
+import { initializeNotes } from './reducers/noteReducer'
 import { useDispatch } from 'react-redux'
 
 // useDispatch-hook provides any React component access to the dispatch-function of the redux-store defined in index.js
@@ -38,9 +37,11 @@ const App = () => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		noteService
+		// use Redux Thunk to remove all the commented part below and replace it with one line dispatch, which acalls the action creator from noteReducer
+		/* noteService
 			.getAll()
-			.then(notes => dispatch(setNotes(notes)))
+			.then(notes => dispatch(setNotes(notes))) */
+		dispatch(initializeNotes())
 	}, [dispatch]) // add dispatch in here to remove eslint warning
 
 	return (

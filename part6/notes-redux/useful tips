@@ -3,3 +3,7 @@ it is necessary for the App component to still aceess the store
 - to enable the access, use hooks-api from react-redux library:
 1. install react-redux library: npm install react-redux
 2. install library Redux Toolkit for easier usage of Redux: npm install @reduxjs/toolkit
+3. install library Redux Thunk: npm install redux-thunk
+	- if we are using toolkit's cnfigureStore, then no additional config for Thunk is necessary
+	- Thunk allows implementing action creators which return a function instead of an object
+	- allows for example implementations of asynchronous action creators, which first wait for the completion of a certain asynchronous operation and after that dispatch some action, which changes the store's state

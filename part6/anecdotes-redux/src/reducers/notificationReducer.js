@@ -14,13 +14,13 @@ const notificationSlice = createSlice({
 // must be outside of the setNotification function, oherwise resetting doesn't work
 let timer = null
 
-export const setNotification = (content) => {
+export const setNotification = (content, time) => {
 	return dispatch => {
 		clearTimeout(timer)
 		dispatch(displayNotification(content))
 		timer = setTimeout(() => {
 			dispatch(displayNotification(''))
-		}, 5000)
+		}, time * 1000)
 	}
 }
 

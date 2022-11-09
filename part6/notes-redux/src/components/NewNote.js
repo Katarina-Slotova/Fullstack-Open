@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux"
 import { createNote } from "../reducers/noteReducer"
-import noteService from '../services/notes'
 
 const NewNote = (props) => {
 	const dispatch = useDispatch()
@@ -12,8 +11,10 @@ const NewNote = (props) => {
 		// so we can access the content via the event object event.target.note.value
 		const content = event.target.note.value
 		event.target.note.value = ''
-		const newNote = await noteService.createNew(content)
-		dispatch(createNote(newNote))
+		// replaced with calling an async function from noteReducer
+		/* const newNote = await noteService.createNew(content)
+		dispatch(createNote(newNote)) */
+		dispatch(createNote(content))
 	}
 
 	return (

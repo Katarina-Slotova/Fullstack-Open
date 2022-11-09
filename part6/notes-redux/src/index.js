@@ -2,10 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App';
 import { Provider } from 'react-redux'
+import store from './store'
 //import { createStore, combineReducers } from 'redux'
-import { configureStore } from '@reduxjs/toolkit'
+/* import { configureStore } from '@reduxjs/toolkit'
 import filterReducer from './reducers/filterReducer'
-import noteReducer from './reducers/noteReducer'
+import noteReducer from './reducers/noteReducer' */
 
 /* const reducer =  combineReducers({
 	notes: noteReducer,
@@ -14,12 +15,13 @@ import noteReducer from './reducers/noteReducer'
 
 const store = createStore(reducer) */
 
-const store = configureStore({
+//store moved to its own file
+/* const store = configureStore({
 	reducer: {
 		notes: noteReducer,
 		filter: filterReducer
 	}
-})
+}) */
 
 console.log(store.getState())
 
