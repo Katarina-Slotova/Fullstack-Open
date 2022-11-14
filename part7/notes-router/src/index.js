@@ -6,6 +6,7 @@ import {
 	Navigate, useParams, useNavigate,
 	useMatch
 } from "react-router-dom"
+import { Table, Form, FormGroup, FormLabel, Button, Alert, Navbar, Nav } from 'react-bootstrap'
 
 const Home = () => (
 	<div> 
@@ -29,13 +30,27 @@ const Note = ({ note }) => {
 const Notes = ({ notes }) => (
 	<div>
 		<h2>Notes</h2>
-		<ul>
+{/* 		<ul>
 			{notes.map(note =>
 				<li key={note.id}>
 					<Link to={`/notes/${note.id}`}>{note.content}</Link>
 				</li>
 			)}
-		</ul>
+		</ul> */}
+		<Table striped>
+			<tbody>
+				{notes.map(note =>
+					<tr key={note.id}>
+						<td>
+							<Link to={`/notes/${note.id}`}>{note.content}</Link>
+						</td>
+						<td>
+							{note.user}
+						</td>
+					</tr>
+				)}
+			</tbody>
+		</Table>
 	</div>
 )
 
@@ -64,15 +79,22 @@ const Login = (props) => {
 	return (
 		<div>
 			<h2>login</h2>
-			<form onSubmit={onSubmit}>
-				<div>
-					username: <input />
-				</div>
-				<div>
-					password: <input type='password' />
-				</div>
-				<button type="submit">login</button>
-			</form>
+			<Form onSubmit={onSubmit}>
+				<FormGroup>
+{/* 				<div>
+						username: <input />
+					</div> */}
+					<FormLabel>username:</FormLabel>
+					<Form.Control type="text" name="username"/>
+{/* 				<div>
+						password: <input type='password' />
+					</div> */}
+					<FormLabel>password:</FormLabel>
+					<Form.Control type="password"/>
+					{/* <button type="submit">login</button> */}
+					<Button type="submit" variant='primary'>login</Button>
+				</FormGroup>
+			</Form>
 		</div>
 	)
 }
@@ -101,9 +123,14 @@ const App = () => {
 	])
 	
 	const [user, setUser] = useState(null)
+	const [message, setMessage] = useState(null)
 	
 	const login = (user) => {
 		setUser(user)
+		setMessage(`welcome ${user}`)
+		setTimeout(() => {
+			setMessage(null)
+		}, 5000)
 	}
 
 	const padding = {
@@ -115,18 +142,45 @@ const App = () => {
 	const note = match ? notes.find(note => note.id === Number(match.params.id)) : null
 
 	return (
-		<div>
+		<div className="container">
+			{(message && 
+				<Alert variant="success">
+					{message}
+				</Alert>
+			)}
 			{/* Routing, or the conditional rendering of components based on the url in the browser, 
 			is used by placing components as children of the Router component */}
 			<div>
+				<Navbar collapseOnSelect expand="lg" bg="dark" varian="dark">
+					<Navbar.Toggle aria-controls='responsive-navbar-nav'/>
+					<Navbar.Collapse id="responsive-navbar-nav">
+						<Nav className="me-auto">
+							<Nav.Link href="#" as="span">
+								<Link style={padding} to="/">home</Link>
+							</Nav.Link>
+							<Nav.Link href="#" as="span">
+								<Link style={padding} to="/notes">notes</Link>
+							</Nav.Link>
+							<Nav.Link href="#" as="span">
+								<Link style={padding} to="/users">users</Link>
+							</Nav.Link>
+							<Nav.Link href="#" as="span">
+								{user
+									? <em style={padding}>{user} logged in</em>
+									: <Link style={padding} to="/login">login</Link>
+								}
+							</Nav.Link>
+						</Nav>
+					</Navbar.Collapse>
+				</Navbar>
 				{/* links modify the address bar with the help of the Link component */}
-				<Link style={padding} to="/">home</Link>
+{/* 			<Link style={padding} to="/">home</Link>
 				<Link style={padding} to="/notes">notes</Link>
 				<Link style={padding} to="/users">users</Link>
 				{user
 					? <em>{user} logged in</em>
 					: <Link style={padding} to="/login">login</Link>
-				}
+				} */}
 			</div>
 
 			<Routes>
